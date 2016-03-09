@@ -1,0 +1,53 @@
+---
+title: "Comparison of the Exponential Distribution to the Central Limit Theorum"
+author: "S Duffy"
+date: "March 9, 2016"
+output: word_document
+---
+
+##Overview
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+##Simulations
+
+First, create the exponential distribution using 40 exponentials and a rate (or lambda) of 0.2. For this distribution, the mean and the standard deviation are 1/rate, or 5.
+```{r}
+exp_dist <- rexp(40, 0.2)
+```
+
+This gives us a random distribution
+
+```{r}
+hist(runif(1000))
+mns = NULL
+for (i in 1 : 1000) mns = c(mns, mean(runif(40)))
+hist(mns)
+```
+
+##Sample Mean v. Theoretical Mean
+
+
+
+##Sample Variance v. Theoretical Varriance
+
+
+
+
+##Distribution
+
+
+
+
+##Conclusion
+

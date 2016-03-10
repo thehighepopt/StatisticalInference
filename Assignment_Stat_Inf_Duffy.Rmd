@@ -1,0 +1,85 @@
+---
+title: An Analysis of NOAA Storm Data to Determine Impacts of Storms to Human and
+  Economic Activity
+author: "Stephen Duffy"
+date: "January 27, 2016"
+output: pdf_document
+---
+
+##Synopsis
+--In a few (2-3) sentences explain what is going to be reported on.
+
+
+
+##Simulations
+--Include English explanations of the simulations you ran, with the accompanying R code. Your explanations should make clear what the R code accomplishes.
+
+First load needed libraries and then read the data file into R
+```{r readdata}
+##First, load needed libraries
+library(plyr)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+options(scipen=999)
+
+##This code looks for the zipped file in your working directory and downloads it if not present
+if (!file.exists("repdata-data-StormData.csv.bz2")) {
+    download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",
+                  destfile = "repdata-data-StormData.csv.bz2")}
+
+##read.csv can read .bz2 files directly, this will take some time.
+noaa_data <- read.csv("repdata-data-StormData.csv.bz2")
+
+##and a quick view of the data
+str(noaa_data)
+```
+
+Then perform some cleanup of the data, such as trimming leading and trailing blanks spaces,
+capitalizing columns for matching, and converting values.
+
+```{r cleandata}
+
+```
+
+The NOAA data has damages to crops and property separated into two columns. The first is a
+numeric value and the second is an exponent, such as "K" or "M".  This analysis needs actual
+numbers and so the numeric value will be multiplied by the exponent value to get an actual
+value, e.g., H = 100, K = 1000, etc.  What's more, there are other characters in the exponent
+column, such as numbers, plus signs, and dashes.  For any row that has a value higher than 0 in 
+the numeric column, but a non-obvious exponent, I purport to multiply that by 1000, as 97-99
+percent of the exponents are "K", that is 1,000.
+
+```{r}
+##This is the justification for using a 1,000 multiplier
+cropexpcount <- noaa_data %>% count(CROPDMGEXP, sort = TRUE)    
+propexpcount <- noaa_data %>% count(PROPDMGEXP, sort = TRUE)
+cropexpcount$Pct <- round(cropexpcount[,2] / sum(cropexpcount[2:7,2]),3)
+propexpcount$Pct <- round(propexpcount[,2] / sum(propexpcount[2:17,2]),3)
+
+crop_perc <- as.data.frame(cropexpcount)
+prop_perc <- as.data.frame(propexpcount)
+
+crop_k <- as.data.frame(cropexpcount)[2,3] * 100
+prop_k <- as.data.frame(propexpcount)[2,3] * 100
+```
+
+
+
+
+##Results
+
+
+###Sample Mean versus Theoretical Mean
+--Include figures with titles. In the figures, highlight the means you are comparing. Include text that explains the figures and what is shown on them, and provides appropriate numbers.
+
+
+
+###Sample Variance versus Theoretical Variance
+--Include figures (output from R) with titles. Highlight the variances you are comparing. Include text that explains your understanding of the differences of the variances.
+
+
+##Distribution
+--Via figures and text, explain how one can tell the distribution is approximately normal.
+
+
